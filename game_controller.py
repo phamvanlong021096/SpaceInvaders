@@ -1,9 +1,11 @@
 import sys
 import pygame
 
+from entities.player import Player
 from config import Config
 
 
+# Class dieu khien game
 class GameController:
 
     def __init__(self):
@@ -17,6 +19,17 @@ class GameController:
         self.background = pygame.image.load(r'data/images/background.png')
         self.background = pygame.transform.scale(self.background, (Config.WIDTH, Config.HEIGHT))
 
+        self.player = self.__create_player()
+
+    @staticmethod
+    def __create_player():
+        # Tao nhan vat player
+        x = Config.WIDTH // 2 - Config.PLAYER_WIDTH // 2
+        y = Config.HEIGHT - 120
+        player = Player(r'data/images/player.png', x=x, y=y)
+
+        return player
+
     def run(self):  # Run game
         while True:
             events = pygame.event.get()  # Tra ve nhung su kien khi tuong tac voi cua so game
@@ -27,6 +40,9 @@ class GameController:
 
             # Draw background
             self.screen.blit(self.background, (0, 0))
+
+            # Draw player
+            self.screen.blit(self.player.image, (self.player.x, self.player.y))
 
             # Update screen
             pygame.display.update()
