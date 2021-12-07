@@ -4,3 +4,5 @@ class Config:
     CAPTION = 'Space Invaders'
     PLAYER_WIDTH = 64
     PLAYER_HEIGHT = 64
+    ENEMY_WIDTH = 64
+    ENEMY_HEIGHT = 64

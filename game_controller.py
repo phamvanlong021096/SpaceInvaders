@@ -1,7 +1,9 @@
 import sys
+import random
 import pygame
 
 from entities.player import Player
+from entities.enemy import Enemy
 from config import Config
 
 
@@ -19,7 +21,10 @@ class GameController:
         self.background = pygame.image.load(r'data/images/background.png')
         self.background = pygame.transform.scale(self.background, (Config.WIDTH, Config.HEIGHT))
 
+        self.clock = pygame.time.Clock()
+
         self.player = self.__create_player()
+        self.enemy = self.__create_enemy()
 
     @staticmethod
     def __create_player():
@@ -29,6 +34,14 @@ class GameController:
         player = Player(r'data/images/player.png', x=x, y=y, move_step=3)
 
         return player
+
+    @staticmethod
+    def __create_enemy():
+        x = random.randint(0, Config.WIDTH - Config.ENEMY_WIDTH)
+        y = random.randint(0, 200)
+        enemy = Enemy(r'data/images/enemy.png', x, y, move_step=3)
+
+        return enemy
 
     def run(self):  # Run game
         while True:
@@ -46,5 +59,10 @@ class GameController:
             # Draw player
             self.screen.blit(self.player.image, (self.player.x, self.player.y))
 
+            # Draw enemy
+            self.screen.blit(self.enemy.image, (self.enemy.x, self.enemy.y))
+
             # Update screen
             pygame.display.update()
+
+            self.clock.tick(120)  # => 120 frame per second
