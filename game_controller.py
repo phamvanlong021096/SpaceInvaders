@@ -26,7 +26,7 @@ class GameController:
         # Tao nhan vat player
         x = Config.WIDTH // 2 - Config.PLAYER_WIDTH // 2
         y = Config.HEIGHT - 120
-        player = Player(r'data/images/player.png', x=x, y=y)
+        player = Player(r'data/images/player.png', x=x, y=y, move_step=3)
 
         return player
 
@@ -37,6 +37,8 @@ class GameController:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+            self.player.move()  # cap nhat x, y neu chung ta nhan phim
 
             # Draw background
             self.screen.blit(self.background, (0, 0))
