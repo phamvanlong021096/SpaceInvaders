@@ -18,7 +18,7 @@ class GameController:
         self.screen = pygame.display.set_mode((Config.WIDTH, Config.HEIGHT))
 
         # Load background image and scale for window screen
-        self.background = pygame.image.load(r'data/images/background.png')
+        self.background = pygame.image.load(r'data/images/background.png').convert()
         self.background = pygame.transform.scale(self.background, (Config.WIDTH, Config.HEIGHT))
 
         self.clock = pygame.time.Clock()
@@ -39,7 +39,7 @@ class GameController:
     def __create_enemy():
         x = random.randint(0, Config.WIDTH - Config.ENEMY_WIDTH)
         y = random.randint(0, 200)
-        enemy = Enemy(r'data/images/enemy.png', x, y, move_step=3)
+        enemy = Enemy(r'data/images/enemy.png', x, y, move_step=3, orient=Config.LEFT)
 
         return enemy
 
@@ -52,6 +52,7 @@ class GameController:
                     sys.exit()
 
             self.player.move()  # cap nhat x, y neu chung ta nhan phim
+            self.enemy.move()  # cap nhat x, y cua enemy tuy thuoc vao huong cua no
 
             # Draw background
             self.screen.blit(self.background, (0, 0))

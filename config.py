@@ -6,3 +6,5 @@ class Config:
     PLAYER_HEIGHT = 64
     ENEMY_WIDTH = 64
     ENEMY_HEIGHT = 64
+    LEFT = 'LEFT'
+    RIGHT = 'RIGHT'
