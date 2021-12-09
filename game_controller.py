@@ -24,7 +24,15 @@ class GameController:
         self.clock = pygame.time.Clock()
 
         self.player = self.__create_player()
-        self.enemy = self.__create_enemy()
+
+        # Init 5 enemies
+        self.enemies = []
+        for i in range(5):
+            enemy = self.__create_enemy()
+            self.enemies.append(enemy)
+
+        # Set: sau 1s, su kien USEREVENT se xay ra
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
 
     @staticmethod
     def __create_player():
@@ -43,6 +51,12 @@ class GameController:
 
         return enemy
 
+    def __add_enemy(self, events):
+        for event in events:
+            if event.type == pygame.USEREVENT:
+                enemy = self.__create_enemy()
+                self.enemies.append(enemy)
+
     def run(self):  # Run game
         while True:
             events = pygame.event.get()  # Tra ve nhung su kien khi tuong tac voi cua so game
@@ -52,7 +66,11 @@ class GameController:
                     sys.exit()
 
             self.player.move()  # cap nhat x, y neu chung ta nhan phim
-            self.enemy.move()  # cap nhat x, y cua enemy tuy thuoc vao huong cua no
+            for enemy in self.enemies:
+                enemy.move()  # cap nhat x, y cua enemy tuy thuoc vao huong cua no
+
+            # check and add new enemy
+            self.__add_enemy(events)
 
             # Draw background
             self.screen.blit(self.background, (0, 0))
@@ -61,7 +79,8 @@ class GameController:
             self.screen.blit(self.player.image, (self.player.x, self.player.y))
 
             # Draw enemy
-            self.screen.blit(self.enemy.image, (self.enemy.x, self.enemy.y))
+            for enemy in self.enemies:
+                self.screen.blit(enemy.image, (enemy.x, enemy.y))
 
             # Update screen
             pygame.display.update()
