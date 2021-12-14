@@ -4,6 +4,7 @@ import pygame
 
 from entities.player import Player
 from entities.enemy import Enemy
+from entities.bullet import Bullet
 from config import Config
 
 
@@ -30,6 +31,9 @@ class GameController:
         for i in range(5):
             enemy = self.__create_enemy()
             self.enemies.append(enemy)
+
+        # Init bullet
+        self.bullet = self.player.fire()
 
         # Set: sau 1s, su kien USEREVENT se xay ra
         pygame.time.set_timer(pygame.USEREVENT, 1000)
@@ -81,6 +85,9 @@ class GameController:
             # Draw enemy
             for enemy in self.enemies:
                 self.screen.blit(enemy.image, (enemy.x, enemy.y))
+
+            # Draw bullet
+            self.screen.blit(self.bullet.image, (self.bullet.x, self.bullet.y))
 
             # Update screen
             pygame.display.update()

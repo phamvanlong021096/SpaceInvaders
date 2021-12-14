@@ -8,3 +8,5 @@ class Config:
     ENEMY_HEIGHT = 64
     LEFT = 'LEFT'
     RIGHT = 'RIGHT'
+    BULLET_WIDTH = 24
+    BULLET_HEIGHT = 24
