@@ -55,66 +55,74 @@ class GameController:
 
         return enemy
 
+    def __check_quit_game(self, events):
+        # Check xem co tat game hay khong
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+    def __move_entities(self):
+        # Di chuyen cac nhan vat va dan
+        self.player.move()  # cap nhat x, y neu chung ta nhan phim
+        for enemy in self.enemies:
+            enemy.move()  # cap nhat x, y cua enemy tuy thuoc vao huong cua no
+        for bullet in self.bullets:
+            bullet.move()
+
     def __add_enemy(self, events):
         for event in events:
             if event.type == pygame.USEREVENT:
                 enemy = self.__create_enemy()
                 self.enemies.append(enemy)
 
+    def __add_bullet(self):
+        # add new bullet
+        bullet = self.player.fire()
+        if bullet is not None:
+            self.bullets.append(bullet)
+
+    def __remove_unavailable_entities(self):
+        new_enemies = []
+        for enemy in self.enemies:
+            if enemy.available:
+                new_enemies.append(enemy)
+        self.enemies = new_enemies
+
+        new_bullets = []
+        for bullet in self.bullets:
+            if bullet.available:
+                new_bullets.append(bullet)
+        self.bullets = new_bullets
+
+    def __draw_game_state(self):
+        # Ve trang thai hien tai cua game
+        # Draw background
+        self.screen.blit(self.background, (0, 0))
+
+        # Draw player
+        self.screen.blit(self.player.image, (self.player.x, self.player.y))
+
+        # Draw enemy
+        for enemy in self.enemies:
+            self.screen.blit(enemy.image, (enemy.x, enemy.y))
+
+        # Draw bullet
+        for bullet in self.bullets:
+            self.screen.blit(bullet.image, (bullet.x, bullet.y))
+
+        # Update screen
+        pygame.display.update()
+
     def run(self):  # Run game
         while True:
-            # trong 1 tich tac, 5 vong while da duoc chay
-            True
-            True
-            True
-            True
-            True
-
-
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_SPACE]:
-                print('True')
-            else:
-                print('False')
-
-            # Check xem co tat game hay khong
-            events = pygame.event.get()  # Tra ve nhung su kien khi tuong tac voi cua so game
-            for event in events:
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-            # Di chuyen cac nhan vat va dan
-            self.player.move()  # cap nhat x, y neu chung ta nhan phim
-            for enemy in self.enemies:
-                enemy.move()  # cap nhat x, y cua enemy tuy thuoc vao huong cua no
-            for bullet in self.bullets:
-                bullet.move()
-
-            # Them emeny va dan
-            # check and add new enemy
+            events = pygame.event.get()
+            self.__check_quit_game(events)
+            self.__move_entities()
             self.__add_enemy(events)
-            # add new bullet
-            bullet = self.player.fire()
-            if bullet is not None:
-                self.bullets.append(bullet)
-
-            # Ve trang thai hien tai cua game
-            # Draw background
-            self.screen.blit(self.background, (0, 0))
-
-            # Draw player
-            self.screen.blit(self.player.image, (self.player.x, self.player.y))
-
-            # Draw enemy
-            for enemy in self.enemies:
-                self.screen.blit(enemy.image, (enemy.x, enemy.y))
-
-            # Draw bullet
-            for bullet in self.bullets:
-                self.screen.blit(bullet.image, (bullet.x, bullet.y))
-
-            # Update screen
-            pygame.display.update()
-
+            self.__add_bullet()
+            self.__remove_unavailable_entities()
+            # print(len(self.enemies))
+            print(len(self.bullets))
+            self.__draw_game_state()
             self.clock.tick(120)  # => 120 frame per second

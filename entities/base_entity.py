@@ -9,6 +9,8 @@ class BaseEntity:
         self.x = x
         self.y = y
         self.move_step = move_step
+        # available = True neu object con nam trong cua so game, nguoc lai = False
+        self.available = True
 
     def move(self):
         pass

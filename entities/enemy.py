@@ -27,3 +27,7 @@ class Enemy(BaseEntity):
             self.x = Config.WIDTH - Config.ENEMY_WIDTH
             self.y += 75
             self.orient = Config.LEFT
+
+        # Check xem enemy co di ra ngoai cua so gam hay khong
+        if self.y > Config.HEIGHT:
+            self.available = False

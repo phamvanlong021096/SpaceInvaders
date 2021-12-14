@@ -12,3 +12,6 @@ class Bullet(BaseEntity):
 
     def move(self):
         self.y -= self.move_step
+
+        if self.y < -Config.BULLET_HEIGHT:
+            self.available = False
