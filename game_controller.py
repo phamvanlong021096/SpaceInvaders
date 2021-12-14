@@ -32,8 +32,8 @@ class GameController:
             enemy = self.__create_enemy()
             self.enemies.append(enemy)
 
-        # Init bullet
-        self.bullet = self.player.fire()
+        # Init bullets
+        self.bullets = []
 
         # Set: sau 1s, su kien USEREVENT se xay ra
         pygame.time.set_timer(pygame.USEREVENT, 1000)
@@ -63,19 +63,43 @@ class GameController:
 
     def run(self):  # Run game
         while True:
+            # trong 1 tich tac, 5 vong while da duoc chay
+            True
+            True
+            True
+            True
+            True
+
+
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_SPACE]:
+                print('True')
+            else:
+                print('False')
+
+            # Check xem co tat game hay khong
             events = pygame.event.get()  # Tra ve nhung su kien khi tuong tac voi cua so game
             for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
+            # Di chuyen cac nhan vat va dan
             self.player.move()  # cap nhat x, y neu chung ta nhan phim
             for enemy in self.enemies:
                 enemy.move()  # cap nhat x, y cua enemy tuy thuoc vao huong cua no
+            for bullet in self.bullets:
+                bullet.move()
 
+            # Them emeny va dan
             # check and add new enemy
             self.__add_enemy(events)
+            # add new bullet
+            bullet = self.player.fire()
+            if bullet is not None:
+                self.bullets.append(bullet)
 
+            # Ve trang thai hien tai cua game
             # Draw background
             self.screen.blit(self.background, (0, 0))
 
@@ -87,7 +111,8 @@ class GameController:
                 self.screen.blit(enemy.image, (enemy.x, enemy.y))
 
             # Draw bullet
-            self.screen.blit(self.bullet.image, (self.bullet.x, self.bullet.y))
+            for bullet in self.bullets:
+                self.screen.blit(bullet.image, (bullet.x, bullet.y))
 
             # Update screen
             pygame.display.update()
