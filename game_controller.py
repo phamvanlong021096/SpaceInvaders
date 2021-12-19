@@ -22,6 +22,7 @@ class GameController:
         self.background = pygame.image.load(r'data/images/background.png').convert()
         self.background = pygame.transform.scale(self.background, (Config.WIDTH, Config.HEIGHT))
         self.game_over_font = pygame.font.Font(r'data/fonts/04B_19.TTF', 36)
+        self.score_font = pygame.font.Font(r'data/fonts/04B_19.TTF', 24)
 
         self.clock = pygame.time.Clock()
 
@@ -40,6 +41,7 @@ class GameController:
         pygame.time.set_timer(pygame.USEREVENT, 1000)
 
         self.is_game_over = False
+        self.score = 0
 
     @staticmethod
     def __create_player():
@@ -92,6 +94,7 @@ class GameController:
                 if enemy.available and bullet.collision(enemy):
                     bullet.available = False
                     enemy.available = False
+                    self.score += 1
                     break
 
         # Neu enemy cham vao player => game over
@@ -127,6 +130,10 @@ class GameController:
         # Draw bullet
         for bullet in self.bullets:
             self.screen.blit(bullet.image, (bullet.x, bullet.y))
+
+        # Draw score
+        text = self.score_font.render('Score: {}'.format(self.score), True, (255, 255, 255))
+        self.screen.blit(text, (10, 10))
 
         # Update screen
         pygame.display.update()
