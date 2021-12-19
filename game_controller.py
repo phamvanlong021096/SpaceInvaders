@@ -24,6 +24,9 @@ class GameController:
         self.game_over_font = pygame.font.Font(r'data/fonts/04B_19.TTF', 36)
         self.score_font = pygame.font.Font(r'data/fonts/04B_19.TTF', 24)
 
+        self.background_sound = pygame.mixer.Sound(r'data/sounds/background.wav')
+        self.explosion_sound = pygame.mixer.Sound(r'data/sounds/explosion.wav')
+
         self.clock = pygame.time.Clock()
 
         self.player = self.__create_player()
@@ -95,6 +98,7 @@ class GameController:
                     bullet.available = False
                     enemy.available = False
                     self.score += 1
+                    self.explosion_sound.play()
                     break
 
         # Neu enemy cham vao player => game over
@@ -172,6 +176,8 @@ class GameController:
             self.bullets = []
 
     def run(self):  # Run game
+        self.background_sound.play(-1)  # play vo tan
+
         while True:
             events = pygame.event.get()
             self.__check_quit_game(events)

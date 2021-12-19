@@ -12,6 +12,7 @@ class Player(BaseEntity):
         self.image = pygame.transform.scale(self.image, (Config.PLAYER_WIDTH, Config.PLAYER_HEIGHT))
         # Dem sau 5 lan True thi ban 1 vien dan
         self.count_time_fire = 0
+        self.fire_sound = pygame.mixer.Sound(r'data/sounds/laser.wav')
 
     def move(self):
         # Overwrite
@@ -38,6 +39,7 @@ class Player(BaseEntity):
 
                 bullet = Bullet(r'data/images/bullet.png', x, y, move_step=6)
                 self.count_time_fire += 1
+                self.fire_sound.play()
 
                 return bullet
 
