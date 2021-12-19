@@ -21,6 +21,7 @@ class GameController:
         # Load background image and scale for window screen
         self.background = pygame.image.load(r'data/images/background.png').convert()
         self.background = pygame.transform.scale(self.background, (Config.WIDTH, Config.HEIGHT))
+        self.game_over_font = pygame.font.Font(r'data/fonts/04B_19.TTF', 36)
 
         self.clock = pygame.time.Clock()
 
@@ -37,6 +38,8 @@ class GameController:
 
         # Set: sau 1s, su kien USEREVENT se xay ra
         pygame.time.set_timer(pygame.USEREVENT, 1000)
+
+        self.is_game_over = False
 
     @staticmethod
     def __create_player():
@@ -82,6 +85,20 @@ class GameController:
         if bullet is not None:
             self.bullets.append(bullet)
 
+    def __check_collision(self):
+        # Kiem tra dan co cham enemy
+        for bullet in self.bullets:
+            for enemy in self.enemies:
+                if enemy.available and bullet.collision(enemy):
+                    bullet.available = False
+                    enemy.available = False
+                    break
+
+        # Neu enemy cham vao player => game over
+        for enemy in self.enemies:
+            if enemy.available and enemy.collision(self.player):
+                self.is_game_over = True
+
     def __remove_unavailable_entities(self):
         new_enemies = []
         for enemy in self.enemies:
@@ -114,15 +131,34 @@ class GameController:
         # Update screen
         pygame.display.update()
 
+    def __draw_game_over_state(self):
+        # Draw background
+        self.screen.blit(self.background, (0, 0))
+
+        text = self.game_over_font.render('GAME OVER', True, (255, 255, 255))
+        width = text.get_width()
+        height = text.get_height()
+        x = Config.WIDTH / 2 - width / 2
+        y = Config.HEIGHT / 2 - height / 2
+        self.screen.blit(text, (x, y))
+
+        # Update screen
+        pygame.display.update()
+
     def run(self):  # Run game
         while True:
             events = pygame.event.get()
             self.__check_quit_game(events)
-            self.__move_entities()
-            self.__add_enemy(events)
-            self.__add_bullet()
-            self.__remove_unavailable_entities()
-            # print(len(self.enemies))
-            print(len(self.bullets))
-            self.__draw_game_state()
+
+            if not self.is_game_over:
+                self.__move_entities()
+                self.__add_enemy(events)
+                self.__add_bullet()
+                self.__check_collision()
+                self.__remove_unavailable_entities()
+                self.__draw_game_state()
+
+            else:
+                self.__draw_game_over_state()
+
             self.clock.tick(120)  # => 120 frame per second

@@ -14,3 +14,12 @@ class BaseEntity:
 
     def move(self):
         pass
+
+    def collision(self, entity):
+        rect = self.image.get_rect(topleft=(self.x, self.y))
+        entity_rect = entity.image.get_rect(topleft=(entity.x, entity.y))
+
+        if rect.colliderect(entity_rect):
+            return True
+
+        return False

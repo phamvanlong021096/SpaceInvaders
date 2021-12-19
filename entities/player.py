@@ -36,7 +36,7 @@ class Player(BaseEntity):
                 x = self.x + Config.PLAYER_WIDTH // 2 - Config.BULLET_WIDTH // 2
                 y = self.y - Config.BULLET_HEIGHT
 
-                bullet = Bullet(r'data/images/bullet.png', x, y, move_step=3)
+                bullet = Bullet(r'data/images/bullet.png', x, y, move_step=6)
                 self.count_time_fire += 1
 
                 return bullet
