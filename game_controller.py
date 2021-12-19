@@ -152,6 +152,25 @@ class GameController:
         # Update screen
         pygame.display.update()
 
+    def __check_new_game(self):
+        # for event in events:
+        #     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            self.is_game_over = False
+            self.score = 0
+
+            self.player = self.__create_player()
+
+            # Init 5 enemies
+            self.enemies = []
+            for i in range(5):
+                enemy = self.__create_enemy()
+                self.enemies.append(enemy)
+
+            # Init bullets
+            self.bullets = []
+
     def run(self):  # Run game
         while True:
             events = pygame.event.get()
@@ -167,5 +186,6 @@ class GameController:
 
             else:
                 self.__draw_game_over_state()
+                self.__check_new_game()  # Check neu an enter -> new game
 
             self.clock.tick(120)  # => 120 frame per second
